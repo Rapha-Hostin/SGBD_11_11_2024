@@ -1,0 +1,23 @@
+CREATE TABLE produtos (
+  id_produto SERIAL PRIMARY KEY,
+  nome_produto VARCHAR(100) NOT NULL,
+  preco DECIMAL(10, 2) NOT NULL
+);
+
+CREATE TABLE compras (
+  id_compra SERIAL PRIMARY KEY,
+  id_produto INT,
+  quantidade INT,
+  data_compra DATE,
+  CONSTRAINT fk_produto FOREIGN KEY (id_produto) REFERENCES produtos(id_produto)
+);
+
+CREATE PROCEDURE relatorio(p_data DATE);
+BEGIN
+  SELECT  nome_produto,
+    SUM(quantidade) AS total_comprado  FROM compras 
+  INNER JOIN produtos 
+  ON compras.id_produto = produtos.id_produto
+  WHERE 
+    compras.data_compra = p_data
+ end
